@@ -2,7 +2,7 @@
 parameter ALU_AND = 4'b0000;
 parameter ALU_XOR = 4'b0001;
 parameter ALU_SUB = 4'b0010;
-parameter ALU_RSB = 4'b0011;
+parameter ALU_RSB = 4'b0011; // Reverse subtract (b - a)
 parameter ALU_ADD = 4'b0100;
 parameter ALU_ORR = 4'b1100;
 
