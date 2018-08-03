@@ -114,6 +114,24 @@ TEST_CASE("ALU subtraction works") {
     }
 }
 
+TEST_CASE("Logic operations work") {
+    uint8_t nzcv;
+    SECTION("AND works") {
+        CHECK(alu_eval_unsigned(0x3, 0x2, ALU_AND, &nzcv) == 0x2); // 11 & 10 => 10
+        CHECK(alu_eval_unsigned(0xDEADBEEF, 0xDEADBEEF, ALU_AND, &nzcv) == 0xDEADBEEF);
+    }
+
+    SECTION("OR works") {
+        CHECK(alu_eval_unsigned(0x1, 0x2, ALU_ORR, &nzcv) == 0x3); // 01 | 10 => 11
+        CHECK(alu_eval_unsigned(0xA3F4, 0x0, ALU_ORR, &nzcv) == 0xA3F4);
+    }
+
+    SECTION("XOR works") {
+        CHECK(alu_eval_unsigned(0x1, 0x3, ALU_XOR, &nzcv) == 0x2); // 01 xor 11 => 10
+        CHECK(alu_eval_unsigned(0xA3F4, 0xA3F4, ALU_XOR, &nzcv) == 0x0);
+    }
+}
+
 int main(int argc, char **argv) {
     Verilated::commandArgs(argc, argv);
     top = new Valu;
