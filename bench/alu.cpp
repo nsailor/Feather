@@ -92,6 +92,28 @@ TEST_CASE("ALU sum works") {
     }
 }
 
+TEST_CASE("ALU subtraction works") {
+    uint8_t nzcv;
+    SECTION("Test unsigned") {
+        CHECK(alu_eval_unsigned(5, 3, ALU_SUB, &nzcv) == 2);
+        CHECK(alu_eval_unsigned(365, 55, ALU_SUB, &nzcv) == (365 - 55));
+        CHECK(alu_eval_unsigned(16, 16, ALU_SUB, &nzcv) == 0);
+        CHECK((nzcv & ALU_Z) > 0);
+    }
+
+    SECTION("Test signed") {
+        CHECK(alu_eval_signed(3, 10, ALU_SUB, &nzcv) == -7);
+        CHECK((nzcv & ALU_N) > 0);
+        CHECK(alu_eval_signed(-3, 2, ALU_SUB, &nzcv) == -5);
+        CHECK(alu_eval_signed(-5, -10, ALU_SUB, &nzcv) == 5);
+    }
+
+    SECTION("Test reverse subtraction") {
+        CHECK(alu_eval_unsigned(3, 5, ALU_RSB, &nzcv) == 2);
+        CHECK(alu_eval_signed(2, -3, ALU_RSB, &nzcv) == -5);
+    }
+}
+
 int main(int argc, char **argv) {
     Verilated::commandArgs(argc, argv);
     top = new Valu;
