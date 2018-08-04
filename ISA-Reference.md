@@ -45,22 +45,22 @@ Instruction | `sh` | Operation
 
 `cmd` | Mnemonic | Operation | Supported
 ---|---|---|---
-`0000` | `AND` | `Rd <= Rn & Src2` | No
-`0001` | `EOR` | `Rd <= Rn ^ Src2` | No
+`0000` | `AND` | `Rd <= Rn and Src2` | No
+`0001` | `EOR` | `Rd <= Rn xor Src2` | No
 `0010` | `SUB` | `Rd <= Rn - Src2` | No
 `0011` | `RSB` | `Rd <= Src2 - Rn` | No
 `0100` | `ADD` | `Rd <= Rn + Src2` | No
 `0101` | `ADC` | `Rd <= Rn + Src2 + c` | No
-`0110` | `SBC` | `Rd <= Rn - Src2 - ~c` | No
-`0111` | `RSC` | `Rd <= Src2 - Rn - ~c` | No
-`1000` | `TST` | Set flags for `Rn & Src2` | No
-`1001` | `TEQ` | Set flags for `Rn ^ Src2` | No
+`0110` | `SBC` | `Rd <= Rn - Src2 - not(c)` | No
+`0111` | `RSC` | `Rd <= Src2 - Rn - not(c)` | No
+`1000` | `TST` | Set flags for `Rn and Src2` | No
+`1001` | `TEQ` | Set flags for `Rn xor Src2` | No
 `1010` | `CMP` | Set flags for `Rn - Src2` | No
 `1011` | `CMN` | Set flags for `Src2 - Rn` | No
-`1100` | `ORR` | `Rd <= Rn | Src2` | No
+`1100` | `ORR` | `Rd <= Rn or Src2` | No
 `1101` | `MOV` | `Rd <= Src2` | No
-`1110` | `BIC` | `Rd <= Rn & ~(Src2)` | No
-`1111` | `MVN` | `Rd <= ~Rn` | No
+`1110` | `BIC` | `Rd <= Rn and not(Src2)` | No
+`1111` | `MVN` | `Rd <= not(Rn)` | No
 
 
 ## Condition Mnemonics
@@ -68,17 +68,17 @@ Instruction | `sh` | Operation
 `cond` | Mnemonic | Name | Condition
 ---|---|---|---
 `0000` | `EQ` | Equal | `z`
-`0001` | `NE` | Not equal | `~z`
+`0001` | `NE` | Not equal | `not(z)`
 `0010` | `CS/HS` | Carry set/unsigned higher or same | `c`
-`0011` | `CC/LO` | Carry clear/unsigned lower | `~c`
+`0011` | `CC/LO` | Carry clear/unsigned lower | `not(c)`
 `0100` | `MI` | Minus/negative | `n`
-`0101` | `PL` | Plus/positive or zero | `~n`
+`0101` | `PL` | Plus/positive or zero | `not(n)`
 `0110` | `VS` | Overflow/overflow set | `v`
-`0111` | `VC` | No overflow/overflow clear | `~v`
-`1000` | `HI` | Unsigned higher | `~z & c`
-`1001` | `LS` | Unsigned lower or same | `z | ~c`
-`1010` | `GE` | Signed greater than or equal | `~(n ^ v)`
-`1011` | `LT` | Signed less than | `n ^ v`
-`1100` | `GT` | Signed greater than | `~z & (~(n ^ v))`
-`1101` | `LE` | Signed less than or equal | `z | (n ^ v)`
+`0111` | `VC` | No overflow/overflow clear | `not(v)`
+`1000` | `HI` | Unsigned higher | `not(z) and c`
+`1001` | `LS` | Unsigned lower or same | `z or not(c)`
+`1010` | `GE` | Signed greater than or equal | `not(n xor v)`
+`1011` | `LT` | Signed less than | `n xor v`
+`1100` | `GT` | Signed greater than | `not(z) and not(n xor v)`
+`1101` | `LE` | Signed less than or equal | `z or (n xor v)`
 `1110` | `AL` | Always/unconditional | `1`
