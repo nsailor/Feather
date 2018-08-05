@@ -16,7 +16,7 @@ If `I` is set, `Src2` is an immediate value with the following format:
 :---:|:---:
 `rot` | `imm8`
 
-The final value is `imm8 << (2 * rot)`.
+The final value is `imm8 >> (2 * rot)`.
 
 Otherwise, `Src2` can be a register `Rm` shifted by an immediate amount `shamt5`, encoded as:
 
@@ -30,7 +30,29 @@ or a register `Rm` shifted by another register `Rs`:
 :---:|:---:|:---:|:---:|:---:
 `Rs` | `0` | `sh` | `1` | `Rm`
 
-###
+### Memory instructions
+
+31:28 | 27:26 | 25 | 24 | 23 | 22 | 21 | 20 | 19:16 | 15:12 | 11:0
+:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:
+`cond` | `op = 01` | `not(I)` | `P` | `U` | `B` | `W` | `L` | `Rn` | `Rd` | `Src2`
+
+If `I` is set, `Src2` (the offset), is interpreted as a 12-bit immediate value.
+Otherwise, `Src2` is interpreted as:
+
+11:7 | 6:5 | 4 | 3:0
+:---:|:---:|:---:|:---:
+`shamt5` | `sh` | `1` | `Rm`
+
+`L` distinguishes between load and store instructions. `U` controls whether the offset should be added or subtracted from `Rn`. `B` determines whether the instruction loads/stores an unsigned byte.
+
+#### Indexing model control bits
+
+P | W | Index mode
+---|---|---
+`0` | `0` | Post-index
+`0` | `1` | Not supported
+`1` | `0` | Offset
+`1` | `1` | Pre-index
 
 ## `sh` field encodings
 
