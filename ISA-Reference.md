@@ -54,6 +54,21 @@ P | W | Index mode
 `1` | `0` | Offset
 `1` | `1` | Pre-index
 
+### Branch instructions
+
+31:28 | 27:26 | 25:24 | 23:0
+:---:|:---:|:---:|:---:
+`cond` | `op = 10` | `1L` | `imm24`
+
+`L` determines whether this is a branch and link instruction.
+The branch target address (BTA) is given by:
+
+`BTA <= (PC + 8) + (imm24 * 4)`
+or with a shift
+`BTA <= (PC + 8) + (imm24 << 2)`
+
+where `imm24` is a signed integer.
+
 ## `sh` field encodings
 
 Instruction | `sh` | Operation
