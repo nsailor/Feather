@@ -28,15 +28,15 @@ double sc_time_stamp() {
  * @return The result returned by the ALU.
  */
 int32_t alu_eval_signed(int32_t a, int32_t b, uint8_t control, uint8_t *nzcv) {
-    top->a = a;
-    top->b = b;
-    top->control = control;
+    top->operand_a_i = a;
+    top->operand_b_i = b;
+    top->control_i = control;
     top->eval();
     tfp->dump(main_time);
     main_time++;
 
-    (*nzcv) = top->nzcv;
-    return top->y;
+    (*nzcv) = top->nzcv_o;
+    return top->result_o;
 }
 
 /**

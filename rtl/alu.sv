@@ -7,59 +7,60 @@ parameter ALU_ADD = 4'b0100;
 parameter ALU_ORR = 4'b1100;
 
 module alu #(parameter N=32)
-          (input logic [3:0] control, // Control bits.
-           input logic [N - 1:0] a,   // First operand.
-           input logic [N - 1:0] b,   // Second operand.
-           output logic [N - 1:0] y,  // Result
-           output logic [3:0] nzcv);  // NZCV flags
+          (input logic [3:0] control_i, // Control bits.
+           input logic [N - 1:0] operand_a_i,   // First operand.
+           input logic [N - 1:0] operand_b_i,   // Second operand.
+           output logic [N - 1:0] result_o,  // Result
+           output logic [3:0] nzcv_o);  // NZCV flags
     logic [N - 1:0] lhs;
     logic [N - 1:0] rhs;
     logic [N:0] sum;
+
     always_comb begin
         // To implement subtraction we reuse the addition logic,
         // effectively implementing a - b = a + (-b) and
         // b - a = b + (-a). This approach allows us to not
         // duplicate our NZCV logic.
-        case (control)
+        case (control_i)
             ALU_SUB: begin
-                lhs = a;
-                rhs = -b;
+                lhs = operand_a_i;
+                rhs = -operand_b_i;
             end
             ALU_RSB: begin
-                lhs = b;
-                rhs = -a;
+                lhs = operand_b_i;
+                rhs = -operand_a_i;
             end
             default: begin
-                lhs = a;
-                rhs = b;
+                lhs = operand_a_i;
+                rhs = operand_b_i;
             end
         endcase
         sum = lhs + rhs;
-        case (control)
+        case (control_i)
             ALU_AND: begin
-                y = a & b;
+                result_o = operand_a_i & operand_b_i;
             end
             ALU_XOR: begin
-                y = a ^ b;
+                result_o = operand_a_i ^ operand_b_i;
             end
             ALU_ADD, ALU_SUB, ALU_RSB: begin
-                y = sum[N - 1:0];
+                result_o = sum[N - 1:0];
             end
             ALU_ORR: begin
-                y = a | b;
+                result_o = operand_a_i | operand_b_i;
             end
             default: begin 
-                y = {N{1'bx}};
+                result_o = {N{1'bx}};
             end
         endcase
     end
 
-    assign nzcv[3] = y[N - 1]; // Use the sign bit for the negative (N) flag.
-    assign nzcv[2] = (y == 0); // Zero flag, check for equality with zero.
-    assign nzcv[1] = sum[N];   // Carry flag, simply the MSB of the real sum.
+    assign nzcv_o[3] = result_o[N - 1]; // Use the sign bit for the negative (N) flag.
+    assign nzcv_o[2] = (result_o == 0); // Zero flag, check for equality with zero.
+    assign nzcv_o[1] = sum[N];   // Carry flag, simply the MSB of the real sum.
 
     // An overflow occurs when we are adding two numbers
-    // of the same sign but the result has a different sign.
+    // of the same sign but the result has operand_a_i different sign.
     // For instance:
     //   01 -> 1   | Notice how the sign of the result
     //  +01 -> 1   | is different to that of the operands.
@@ -70,5 +71,5 @@ module alu #(parameter N=32)
     logic msb_lhs = lhs[N - 1];
     logic msb_rhs = rhs[N - 1];
     logic msb_sum = sum[N - 1];
-    assign nzcv[0] = (msb_lhs == msb_rhs) && (msb_sum != msb_lhs);
+    assign nzcv_o[0] = (msb_lhs == msb_rhs) && (msb_sum != msb_lhs);
 endmodule
