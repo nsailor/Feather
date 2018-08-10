@@ -49,15 +49,20 @@ module alu #(parameter N=32)
             ALU_ORR: begin
                 result_o = operand_a_i | operand_b_i;
             end
-            default: begin 
+            default: begin
                 result_o = {N{1'bx}};
             end
         endcase
     end
 
-    assign nzcv_o[3] = result_o[N - 1]; // Use the sign bit for the negative (N) flag.
-    assign nzcv_o[2] = (result_o == 0); // Zero flag, check for equality with zero.
-    assign nzcv_o[1] = sum[N];   // Carry flag, simply the MSB of the real sum.
+    // Use the sign bit for the negative (N) flag.
+    assign nzcv_o[3] = result_o[N - 1];
+
+    // Zero flag, check for equality with zero.
+    assign nzcv_o[2] = (result_o == 0);
+
+    // Carry flag, simply the MSB of the real sum.
+    assign nzcv_o[1] = sum[N];
 
     // An overflow occurs when we are adding two numbers
     // of the same sign but the result has operand_a_i different sign.

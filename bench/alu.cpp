@@ -17,14 +17,14 @@ double sc_time_stamp() {
 }
 
 /**
- * Uses the ALU module to evaluate an ALU operation while adding the result to the
- * trace file.
- * 
+ * Uses the ALU module to evaluate an ALU operation while adding the result to
+ * the trace file.
+ *
  * @param a The first operand.
  * @param b The second operand.
  * @param control The control bits, set on the lower 4 bits of the byte.
  * @param nzcv Location to save the NZCV flag values, on the lower 4 bits.
- * 
+ *
  * @return The result returned by the ALU.
  */
 int32_t alu_eval_signed(int32_t a, int32_t b, uint8_t control, uint8_t *nzcv) {
@@ -43,7 +43,8 @@ int32_t alu_eval_signed(int32_t a, int32_t b, uint8_t control, uint8_t *nzcv) {
  * Uses the ALU to evaluate an ALU operation using unsigned integer types.
  * @see alu_eval_signed for more information
  */
-uint32_t alu_eval_unsigned(uint32_t a, uint32_t b, uint8_t control, uint8_t *nzcv) {
+uint32_t alu_eval_unsigned(uint32_t a, uint32_t b, uint8_t control,
+                           uint8_t *nzcv) {
     return (uint32_t)alu_eval_signed((uint32_t)a, (uint32_t)b, control, nzcv);
 }
 
@@ -67,7 +68,7 @@ TEST_CASE("ALU sum works") {
         CHECK(alu_eval_signed(1, 1, ALU_ADD, &nzcv) == 2);
         CHECK(alu_eval_signed(2, 3, ALU_ADD, &nzcv) == 5);
     }
-    
+
     SECTION("Test signed sum.") {
         CHECK(alu_eval_signed(2, -2, ALU_ADD, &nzcv) == 0);
         CHECK((nzcv & ALU_Z) > 0);
@@ -76,14 +77,14 @@ TEST_CASE("ALU sum works") {
         CHECK(alu_eval_signed(2, -5, ALU_ADD, &nzcv) == -3);
         CHECK((nzcv & ALU_N) > 0);
     }
-    
+
     SECTION("Test overflow flag.") {
         alu_eval_signed(0x7FFFFFFF, 0x1, ALU_ADD, &nzcv);
         CHECK((nzcv & ALU_V) > 0);
         alu_eval_signed(44, 57, ALU_ADD, &nzcv);
         CHECK((nzcv & ALU_V) == 0);
     }
-    
+
     SECTION("Test carry flag.") {
         CHECK(alu_eval_unsigned(3, 2, ALU_ADD, &nzcv) == 5);
         CHECK((nzcv & ALU_C) == 0);
@@ -117,17 +118,21 @@ TEST_CASE("ALU subtraction works") {
 TEST_CASE("Logic operations work") {
     uint8_t nzcv;
     SECTION("AND works") {
-        CHECK(alu_eval_unsigned(0x3, 0x2, ALU_AND, &nzcv) == 0x2); // 11 & 10 => 10
-        CHECK(alu_eval_unsigned(0xDEADBEEF, 0xDEADBEEF, ALU_AND, &nzcv) == 0xDEADBEEF);
+        // 11 & 10 => 10
+        CHECK(alu_eval_unsigned(0x3, 0x2, ALU_AND, &nzcv) == 0x2);
+        CHECK(alu_eval_unsigned(
+            0xDEADBEEF, 0xDEADBEEF, ALU_AND, &nzcv) == 0xDEADBEEF);
     }
 
     SECTION("OR works") {
-        CHECK(alu_eval_unsigned(0x1, 0x2, ALU_ORR, &nzcv) == 0x3); // 01 | 10 => 11
+        // 01 | 10 => 11
+        CHECK(alu_eval_unsigned(0x1, 0x2, ALU_ORR, &nzcv) == 0x3);
         CHECK(alu_eval_unsigned(0xA3F4, 0x0, ALU_ORR, &nzcv) == 0xA3F4);
     }
 
     SECTION("XOR works") {
-        CHECK(alu_eval_unsigned(0x1, 0x3, ALU_XOR, &nzcv) == 0x2); // 01 xor 11 => 10
+        // 01 xor 11 => 10
+        CHECK(alu_eval_unsigned(0x1, 0x3, ALU_XOR, &nzcv) == 0x2);
         CHECK(alu_eval_unsigned(0xA3F4, 0xA3F4, ALU_XOR, &nzcv) == 0x0);
     }
 }
@@ -139,7 +144,7 @@ int main(int argc, char **argv) {
 
     Verilated::traceEverOn(true);
     tfp = new VerilatedVcdC;
-    
+
     top->trace(tfp, 99);
     std::string vcd_name = argv[0];
     vcd_name += ".vcd";
