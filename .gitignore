@@ -2,3 +2,4 @@ bench/sim_*
 bench/*.png
 *.DS_Store
 .vscode
+*.vcd
