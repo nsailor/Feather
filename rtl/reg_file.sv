@@ -1,0 +1,22 @@
+
+module reg_file #(parameter N=32)
+    (input logic clk,
+     input logic [3:0] address1_i,
+     input logic [3:0] address2_i,
+     input logic [3:0] address3_i,
+     input logic [N - 1:0] write_data_i,
+     input logic write_enable_i,
+     output logic [N - 1:0] output1_o,
+     output logic [N - 1:0] output2_o
+);
+    logic [N - 1:0] registers [0:15];
+
+    assign output1_o = registers[address1_i];
+    assign output2_o = registers[address2_i];
+
+    always @(posedge clk) begin
+        if (write_enable_i) begin
+            registers[address3_i] = write_data_i;
+        end
+    end
+endmodule

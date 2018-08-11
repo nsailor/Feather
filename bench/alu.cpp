@@ -56,12 +56,12 @@ public:
 
     bool verify() {
         for (test_case t : test_vector) {
-            m_core->control_i = t.control;
-            m_core->operand_a_i = t.a;
-            m_core->operand_b_i = t.b;
+            m_dut->control_i = t.control;
+            m_dut->operand_a_i = t.a;
+            m_dut->operand_b_i = t.b;
             tick();
-            if ((m_core->result_o != t.result)
-                || (m_core->nzcv_o != t.nzcv)) {
+            if ((m_dut->result_o != t.result)
+                || (m_dut->nzcv_o != t.nzcv)) {
                 printf("Test failed.\n");
                 tick();
                 return false;

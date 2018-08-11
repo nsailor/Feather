@@ -5,9 +5,13 @@ all: alu
 LDFLAGS=
 CFLAGS=-g -O3 -std=c++11 -faligned-new
 
-%:
-	verilator -Wno-fatal -I$(RTL_SRC)/ --cc $(@) --trace --exe ../$(@).cpp -Mdir sim_$(@) -CFLAGS "$(CFLAGS)"
-	make -C sim_$(@) -f V$(@).mk
+verify: verify-alu verify-reg_file
+
+verify-%:
+	verilator -Wno-fatal -I$(RTL_SRC)/ --cc $(*) --trace --exe ../$(*).cpp \
+		-Mdir sim_$(*) -CFLAGS "$(CFLAGS)"
+	make -C sim_$(*) -f V$(*).mk
+	sim_$(*)/V$(*)
 
 synth-%:
 	yosys -p "prep; proc; opt; fsm; opt; show -prefix ./$(*)" $(RTL_SRC)/$(*).sv
