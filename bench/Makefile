@@ -5,7 +5,7 @@ all: alu
 LDFLAGS=
 CFLAGS=-g -O3 -std=c++11 -faligned-new
 
-verify: verify-alu verify-reg_file
+verify: verify-alu verify-reg_file verify-program_memory
 
 verify-%:
 	verilator -Wno-fatal -I$(RTL_SRC)/ --cc $(*) --trace --exe ../$(*).cpp \

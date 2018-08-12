@@ -6,15 +6,19 @@ public:
     bool verify() {
         // Set every register to its index.
         // e.g. R0 = 0, R1 = 1, etc.
-        for (int i = 0; i < 16; i++) {
+        for (int i = 0; i < 15; i++) {
             m_dut->write_enable_i = 1;
             m_dut->address3_i = i;
             m_dut->write_data_i = i;
             tick();
         }
 
+        // Do the same for the PC.
+        m_dut->r15_i = 0xF;
+        tick();
+
         // Disable the write_enable bit and try to set every register to 0.
-        for (int i = 0; i < 16; i++) {
+        for (int i = 0; i < 15; i++) {
             m_dut->write_enable_i = 0;
             m_dut->address3_i = i;
             m_dut->write_data_i = 0;
