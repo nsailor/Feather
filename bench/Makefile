@@ -9,12 +9,12 @@ verify: verify-alu verify-reg_file verify-program_memory
 
 verify-%:
 	verilator -Wno-fatal -I$(RTL_SRC)/ --cc $(*) --trace --exe ../$(*).cpp \
-		-Mdir sim_$(*) -CFLAGS "$(CFLAGS)"
+		-Mdir sim_$(*) -CFLAGS "$(CFLAGS)" --top-module $(*)
 	make -C sim_$(*) -f V$(*).mk
 	sim_$(*)/V$(*)
 
 synth-%:
-	yosys -p "prep; proc; opt; fsm; opt; show -prefix ./$(*)" $(RTL_SRC)/$(*).sv
+	yosys -p "prep; proc; opt; fsm; opt; select $(*); show;" $(RTL_SRC)/$(*).sv
 	dot -Tpng ./$(*).dot > $(*).png
 	rm *.dot *.dot.pid
 
