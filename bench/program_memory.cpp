@@ -8,7 +8,7 @@ public:
         for (int i = 0; i < 3; i++) {
             m_dut->address_i = i * 4;
             tick();
-            printf("%08x\n", m_dut->instruction_i);
+            printf("%08x\n", m_dut->instruction_o);
         }
         tick();
     }
