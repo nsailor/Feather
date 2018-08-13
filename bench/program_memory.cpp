@@ -5,7 +5,7 @@
 class TB_PROGRAM_MEMORY : public TB_COMBINATIONAL<Vprogram_memory> {
 public:
     void dump_contents() {
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 4; i++) {
             m_dut->address_i = i * 4;
             tick();
             printf("%08x\n", m_dut->instruction_o);

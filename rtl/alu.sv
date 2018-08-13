@@ -5,6 +5,7 @@ parameter ALU_SUB = 4'b0010;
 parameter ALU_RSB = 4'b0011; // Reverse subtract (b - a)
 parameter ALU_ADD = 4'b0100;
 parameter ALU_ORR = 4'b1100;
+parameter ALU_MOV = 4'b1101;
 
 module alu #(parameter N=32)
           (input logic [3:0] control_i, // Control bits.
@@ -48,6 +49,9 @@ module alu #(parameter N=32)
             end
             ALU_ORR: begin
                 result_o = operand_a_i | operand_b_i;
+            end
+            ALU_MOV: begin
+                result_o = operand_b_i;
             end
             default: begin
                 result_o = {N{1'bx}};

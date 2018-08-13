@@ -5,5 +5,5 @@ module immediate_shifter(
     input logic [3:0] rot_i,
     output logic [31:0] result_o
 );
-    assign result_o = imm8 >> (rot_i << 1);
+    assign result_o = imm8_i >> (rot_i << 1);
 endmodule

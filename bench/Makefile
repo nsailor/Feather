@@ -14,7 +14,7 @@ verify-%:
 	sim_$(*)/V$(*)
 
 synth-%:
-	yosys -p "prep; proc; opt; fsm; opt; select $(*); show;" $(RTL_SRC)/$(*).sv
+	yosys -p "prep; proc; opt; fsm; opt; show -prefix ./$(*) -format ps" $(RTL_SRC)/$(*).sv
 	dot -Tpng ./$(*).dot > $(*).png
 	rm *.dot *.dot.pid
 
