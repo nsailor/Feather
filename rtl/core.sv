@@ -3,6 +3,7 @@
 `include "program_memory.sv"
 `include "memory.sv"
 `include "immediate_shifter.sv"
+`include "control.sv"
 
 module core(input logic clk,
             input logic reset_i);
@@ -63,6 +64,8 @@ module core(input logic clk,
         .output3_o(reg_file_o3)
     );
 
+    logic memory_write_enable;
+
     logic [4:0] shifter_shamt5;
     logic [31:0] shifter_input;
     logic [1:0] shifter_sh;
@@ -85,6 +88,16 @@ module core(input logic clk,
         .result_o(imm_shifter_result)
     );
 
+    logic reg_write_src;
+    control u_control(
+        .clk(clk),
+        .instruction_i(instruction),
+        .nzcv_i(alu_nzcv),
+        .reg_write_src_o(reg_write_src),
+        .reg_file_write_enable_o(reg_file_write_enable),
+        .memory_write_enable_o(memory_write_enable)
+    );
+
     assign alu_control = instruction[24:21];
     assign alu_input_a = reg_file_o1;
     assign reg_file_a1 = instruction[19:16];
@@ -103,7 +116,5 @@ module core(input logic clk,
 
     assign alu_input_b = instruction[25] ? imm_shifter_result : shifter_result;
 
-    assign reg_file_wd = alu_result;
-
-    assign reg_file_write_enable = 1'b1; // TEMPORARY
+    assign reg_file_wd = reg_write_src ? 32'b0 : alu_result;
 endmodule
