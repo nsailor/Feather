@@ -18,7 +18,7 @@ module core(input logic clk,
     // Update the program counter.
     assign next_pc = reset_i ? 0 : pc + 4;
     always @(posedge clk) begin
-        pc = next_pc;
+        pc <= next_pc;
     end
 
     program_memory u_program_memory(

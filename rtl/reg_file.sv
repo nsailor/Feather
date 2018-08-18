@@ -19,7 +19,7 @@ module reg_file #(parameter N=32)
     assign output3_o = registers[address3_i];
 
     always @(posedge clk) begin
-        registers[15] = r15_i;
+        registers[15] <= r15_i;
     end
 
     // Note: writing to R15 (the PC), is illegal in our implementation of the
@@ -28,7 +28,7 @@ module reg_file #(parameter N=32)
 
     always @(posedge clk) begin
         if (write_enable_i) begin
-            registers[address_write_i] = write_data_i;
+            registers[address_write_i] <= write_data_i;
         end
     end
 endmodule

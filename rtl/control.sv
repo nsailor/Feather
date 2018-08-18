@@ -29,7 +29,7 @@ module control(input logic clk,
 
     always @(posedge clk)
         if (should_update_nzcv)
-            nzcv = nzcv_i;
+            nzcv <= nzcv_i;
 
     logic cond_res;
     logic [3:0] condition;

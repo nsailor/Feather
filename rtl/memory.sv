@@ -12,7 +12,7 @@ module memory(
 
     always @(posedge clk) begin
         if (write_enable_i) begin
-            ram[address_i] = write_data_i;
+            ram[address_i] <= write_data_i;
         end
     end
 endmodule
