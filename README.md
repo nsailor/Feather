@@ -16,14 +16,18 @@ make verify-<module-name>
 
 This will build the C++ model for that model and run the testbench.
 
-To run the test program in `bench/tests/program1.s`, you can type:
+To run the test program in `bench/tests/test.s`, you can type:
 
 ```
+make test-programs
 make verify-core
 ```
 
 The results will be saved in the `out.vcd` file.
 
-To run your own programs, you can use a website like [http://armconverter.com] to generate the hex code and then write it in little-endian format in the `program1.hex` file, which is what the simulator actually reads. Alternatively, you can use any ARM assembler and extract the binary encoding from there.
+The `verify-core` target will execute the example program in `bench/tests/test.s`.
+To generate the vhex file containing a Verilog-style ROM description of the binary code, make the `test-programs` target.
+
+The Makefile uses the `arm-none-eabi` GNU toolchain to build the example program, and expects to find it installed in your system. The relevant Ubuntu package is `gcc-arm-none-eabi`.
 
 At the moment only data processing instructions are supported.
