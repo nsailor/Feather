@@ -5,6 +5,15 @@ all: alu
 LDFLAGS=
 CFLAGS=-g -O3 -std=c++11 -faligned-new
 
+ARM_CC=arm-none-eabi-gcc
+ARM_AS=arm-none-eabi-as
+ARM_OBJCOPY=arm-none-eabi-objcopy
+
+test-program:
+	${ARM_AS} tests/test.s -o tests/test
+	${ARM_OBJCOPY} -O verilog tests/test tests/test.vhex
+	rm tests/test
+
 verify: verify-alu verify-reg_file verify-program_memory
 
 verify-%:
@@ -22,4 +31,4 @@ clean:
 	rm -rf *.o sim_*
 
 distclean: clean
-	rm -rf *~ *.txt *.vcd *.mif *.orig *.png
+	rm -rf *~ *.txt *.vcd *.mif *.orig *.png tests/*.vhex

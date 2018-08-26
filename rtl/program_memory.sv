@@ -10,6 +10,6 @@ module program_memory(
     assign instruction_o[31:24] = instruction_memory[address_i + 3];
 
     initial begin
-        $readmemh("tests/program1.hex", instruction_memory, 0, 15);
+        $readmemh("tests/test.vhex", instruction_memory);
     end
 endmodule

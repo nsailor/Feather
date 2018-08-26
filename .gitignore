@@ -1,5 +1,6 @@
 bench/sim_*
 bench/*.png
+bench/tests/*.vhex
 *.DS_Store
 .vscode
 *.vcd
