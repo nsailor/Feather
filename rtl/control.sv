@@ -1,8 +1,9 @@
 module control(input logic clk,
                input logic [31:0] instruction_i,
                input logic [3:0] nzcv_i,
-               output logic reg_write_src_o,
-               output logic reg_file_write_enable_o,
+               output logic reg_write_src_o, // Only applies to port 1
+               output logic reg_file_write_enable1_o,
+               output logic reg_file_write_enable2_o,
                output logic memory_write_enable_o);
 
     localparam INSTRUCTION_TYPE_DATA_PROCESSING = 2'b00;
@@ -74,10 +75,13 @@ module control(input logic clk,
 
     // Write to a register in data processing and load
     // instructions.
-    assign reg_file_write_enable_o =
+    assign reg_file_write_enable1_o =
         ((instruction_type == INSTRUCTION_TYPE_DATA_PROCESSING)
         | ((instruction_type == INSTRUCTION_TYPE_MEMORY)
             & is_load_instruction)) & cond_res;
+
+    // To be used in memory instructions.
+    assign reg_file_write_enable2_o = 1'b0;
 
     assign memory_write_enable_o =
         ((instruction_type == INSTRUCTION_TYPE_MEMORY)

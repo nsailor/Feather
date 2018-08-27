@@ -9,9 +9,9 @@ public:
     // Set every register to its index.
     // e.g. R0 = 0, R1 = 1, etc.
     for (int i = 0; i < 15; i++) {
-      m_dut->write_enable_i = 1;
-      m_dut->address_write_i = i;
-      m_dut->write_data_i = i;
+      m_dut->write_enable1_i = 1;
+      m_dut->address_write1_i = i;
+      m_dut->write_data1_i = i;
       tick();
     }
 
@@ -21,9 +21,9 @@ public:
 
     // Disable the write_enable bit and try to set every register to 0.
     for (int i = 0; i < 16; i++) {
-      m_dut->write_enable_i = 0;
-      m_dut->address_write_i = i;
-      m_dut->write_data_i = 0;
+      m_dut->write_enable2_i = 0;
+      m_dut->address_write2_i = i;
+      m_dut->write_data2_i = 0;
       tick();
     }
 

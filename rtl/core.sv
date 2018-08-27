@@ -10,11 +10,6 @@ module core(input logic clk,
     logic [7:0] pc, next_pc;
     logic [31:0] instruction;
 
-    // Whether the instruction should be executed at all.
-    // It should be AND'ed with any write enable signal.
-    logic condition_result;
-    assign condition_result = 1'b1; // Don't check conditions for now.
-
     // Update the program counter.
     assign next_pc = reset_i ? 0 : pc + 4;
 
@@ -40,21 +35,27 @@ module core(input logic clk,
     logic [3:0] reg_file_a1,
                 reg_file_a2,
                 reg_file_a3,
-                reg_file_wa;
-    logic [31:0] reg_file_wd,
+                reg_file_wa1,
+                reg_file_wa2;
+    logic [31:0] reg_file_wd1,
+                 reg_file_wd2,
                  reg_file_o1,
                  reg_file_o2,
                  reg_file_o3;
-    logic reg_file_write_enable;
+    logic reg_file_write_enable1;
+    logic reg_file_write_enable2;
 
     reg_file u_reg_file(
         .clk(clk),
         .address1_i(reg_file_a1),
         .address2_i(reg_file_a2),
         .address3_i(reg_file_a3),
-        .address_write_i(reg_file_wa),
-        .write_data_i(reg_file_wd),
-        .write_enable_i(reg_file_write_enable),
+        .address_write1_i(reg_file_wa1),
+        .write_data1_i(reg_file_wd1),
+        .write_enable1_i(reg_file_write_enable1),
+        .address_write2_i(reg_file_wa2),
+        .write_data2_i(reg_file_wd2),
+        .write_enable2_i(reg_file_write_enable2),
         .r15_i(next_pc),
         .output1_o(reg_file_o1),
         .output2_o(reg_file_o2),
@@ -92,7 +93,8 @@ module core(input logic clk,
         .instruction_i(instruction),
         .nzcv_i(alu_nzcv),
         .reg_write_src_o(reg_write_src),
-        .reg_file_write_enable_o(reg_file_write_enable),
+        .reg_file_write_enable1_o(reg_file_write_enable1),
+        .reg_file_write_enable2_o(reg_file_write_enable2),
         .memory_write_enable_o(memory_write_enable)
     );
 
@@ -101,7 +103,7 @@ module core(input logic clk,
     assign reg_file_a1 = instruction[19:16];
     assign reg_file_a2 = instruction[3:0];
     assign reg_file_a3 = instruction[11:8];
-    assign reg_file_wa = instruction[15:12];
+    assign reg_file_wa1 = instruction[15:12];
 
     assign shifter_shamt5 = instruction[4] ?
         reg_file_o3[4:0] : instruction[11:7];
@@ -114,5 +116,5 @@ module core(input logic clk,
 
     assign alu_input_b = instruction[25] ? imm_shifter_result : shifter_result;
 
-    assign reg_file_wd = reg_write_src ? 32'b0 : alu_result;
+    assign reg_file_wd1 = reg_write_src ? 32'b0 : alu_result;
 endmodule
