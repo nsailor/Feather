@@ -20,7 +20,7 @@ public:
     tick();
 
     // Disable the write_enable bit and try to set every register to 0.
-    for (int i = 0; i < 15; i++) {
+    for (int i = 0; i < 16; i++) {
       m_dut->write_enable_i = 0;
       m_dut->address_write_i = i;
       m_dut->write_data_i = 0;

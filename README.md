@@ -26,7 +26,7 @@ make verify-core
 The results will be saved in the `out.vcd` file.
 
 The `verify-core` target will execute the example program in `bench/tests/test.s`.
-To generate the vhex file containing a Verilog-style ROM description of the binary code, make the `test-programs` target.
+To generate the vhex file containing a Verilog-style ROM description of the binary code, make the `test-program` target.
 
 The Makefile uses the `arm-none-eabi` GNU toolchain to build the example program, and expects to find it installed in your system. The relevant Ubuntu package is `gcc-arm-none-eabi`.
 

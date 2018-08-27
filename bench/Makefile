@@ -14,9 +14,9 @@ test-program:
 	${ARM_OBJCOPY} -O verilog tests/test tests/test.vhex
 	rm tests/test
 
-verify: verify-alu verify-reg_file verify-program_memory
+verify: verify-alu verify-reg_file verify-program_memory verify-core
 
-verify-%:
+verify-%: test-program
 	verilator -Wno-fatal -I$(RTL_SRC)/ --cc $(*) --trace --exe ../$(*).cpp \
 		-Mdir sim_$(*) -CFLAGS "$(CFLAGS)" --top-module $(*)
 	make -C sim_$(*) -f V$(*).mk

@@ -17,9 +17,6 @@ module core(input logic clk,
 
     // Update the program counter.
     assign next_pc = reset_i ? 0 : pc + 4;
-    always @(posedge clk) begin
-        pc <= next_pc;
-    end
 
     program_memory u_program_memory(
         .address_i(pc),
@@ -61,7 +58,8 @@ module core(input logic clk,
         .r15_i(next_pc),
         .output1_o(reg_file_o1),
         .output2_o(reg_file_o2),
-        .output3_o(reg_file_o3)
+        .output3_o(reg_file_o3),
+        .r15_o(pc)
     );
 
     logic memory_write_enable;

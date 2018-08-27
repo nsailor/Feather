@@ -10,25 +10,26 @@ module reg_file #(parameter N=32)
      input logic [N - 1:0] r15_i,
      output logic [N - 1:0] output1_o,
      output logic [N - 1:0] output2_o,
-     output logic [N - 1:0] output3_o
+     output logic [N - 1:0] output3_o,
+     output logic [N - 1:0] r15_o
 );
     logic [N - 1:0] registers [0:15];
 
     assign output1_o = registers[address1_i];
     assign output2_o = registers[address2_i];
     assign output3_o = registers[address3_i];
-
-    always @(posedge clk) begin
-        registers[15] <= r15_i;
-    end
-
-    // Note: writing to R15 (the PC), is illegal in our implementation of the
-    // ARM ISA. However, there is no universal way to define an assertion both
-    // in Yosys and in Verilator, so this goes unchecked.
+    assign r15_o = registers[15];
 
     always @(posedge clk) begin
         if (write_enable_i) begin
-            registers[address_write_i] <= write_data_i;
+            if (address_write_i == 15) begin
+                registers[15] <= write_data_i;
+            end else begin
+                registers[address_write_i] <= write_data_i;
+                registers[15] <= r15_i;
+            end
+        end else begin
+            registers[15] <= r15_i;
         end
     end
 endmodule

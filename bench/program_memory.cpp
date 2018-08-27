@@ -10,7 +10,7 @@ public:
     for (int i = 0; i < 256; i++) {
       m_dut->address_i = i * 4;
       tick();
-      printf("%08x\n", m_dut->instruction_o);
+      printf("%02x: %08x\n", i, m_dut->instruction_o);
     }
     tick();
   }
