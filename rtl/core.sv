@@ -1,22 +1,16 @@
 `include "alu.sv"
 `include "reg_file.sv"
-`include "program_memory.sv"
 `include "memory.sv"
 `include "immediate_shifter.sv"
 `include "control.sv"
 
 module core(input logic clk,
             input logic reset_i);
-    logic [7:0] pc, next_pc;
+    logic [31:0] pc, next_pc;
     logic [31:0] instruction;
 
     // Update the program counter.
     assign next_pc = reset_i ? 0 : pc + 4;
-
-    program_memory u_program_memory(
-        .address_i(pc),
-        .instruction_o(instruction)
-    );
 
     logic [3:0] alu_control;
     logic [31:0] alu_input_a;
@@ -64,6 +58,19 @@ module core(input logic clk,
     );
 
     logic memory_write_enable;
+    logic [31:0] memory_address;
+    logic [7:0] memory_data;
+    logic [7:0] memory_write_data;
+
+    memory u_memory(
+        .clk(clk),
+        .address_i(memory_address),
+        .write_enable_i(memory_write_enable),
+        .write_data_i(memory_write_data),
+        .data_o(memory_data),
+        .instruction_address_i(pc),
+        .instruction_o(instruction)
+    );
 
     logic [4:0] shifter_shamt5;
     logic [31:0] shifter_input;
