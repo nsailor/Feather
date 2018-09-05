@@ -12,8 +12,19 @@ public:
     const int max_cycles = 100;
     while (!Verilated::gotFinish() && (tick_count() <= max_cycles * 2)) {
       tick();
+      dump_registers();
     }
     return true;
+  }
+
+  void dump_registers()
+  {
+    for (int i = 0; i < 16; i++) {
+      printf("R%d: %x%c",
+        i,
+        m_dut->core__DOT__u_reg_file__DOT__registers[i],
+        (i == 15) ? '\n' : '\t');
+    }
   }
 };
 

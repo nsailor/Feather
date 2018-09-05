@@ -5,7 +5,7 @@ AlignEscapedNewlinesLeft: true
 AlwaysBreakAfterDefinitionReturnType: None
 BreakBeforeBraces: Linux
 BreakConstructorInitializersBeforeComma: false
-ColumnLimit: 100
+ColumnLimit: 80 
 ConstructorInitializerAllOnOneLineOrOnePerLine: true
 ConstructorInitializerIndentWidth: 0
 IndentCaseLabels: false
