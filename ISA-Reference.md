@@ -49,8 +49,8 @@ Otherwise, `Src2` is interpreted as:
 
 P | W | Index mode
 ---|---|---
-`0` | `0` | Post-index
-`0` | `1` | Not supported
+`0` | `0` | Not supported
+`0` | `1` | Post-index
 `1` | `0` | Offset
 `1` | `1` | Pre-index
 
